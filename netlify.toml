@@ -1,0 +1,13 @@
+[build]
+  command = "pnpm --filter @workspace/gsv... run build"
+  publish = "artifacts/gsv/dist/public"
+
+[build.environment]
+  NODE_VERSION = "22"
+  BASE_PATH = "/"
+  PORT = "3000"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
