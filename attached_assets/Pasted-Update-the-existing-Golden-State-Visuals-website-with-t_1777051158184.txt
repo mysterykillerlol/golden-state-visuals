@@ -1,0 +1,39 @@
+Update the existing Golden State Visuals website with the following changes only.
+
+Remove all AI-generated images from the site. Do not use seeded AI images, placeholder AI photos, or generated sports photography anywhere. Any existing seeded AI images should be removed from the database and frontend display. If no real image has been uploaded yet, show a clean ESPN-style placeholder card with text only, not an image.
+
+Fix the backend so there are no 404 errors in the admin or staff areas. Every admin/staff route should load correctly on refresh and direct navigation. Make sure the frontend router, API routes, and server fallback are all configured correctly.
+
+Build a working staff/admin backend where I can manage the site content myself.
+
+Staff/admin requirements:
+- Staff login link should stay discreet in the footer
+- Login email: tylershawphoto@gmail.com
+- Password: 4Lex!gsv
+- After login, take me to a staff dashboard
+- Dashboard should show total articles, posts, galleries, and recent uploads
+- Add a clean sidebar with Manage Articles, Create Article, Posts, Galleries, Games, and Settings
+- I should be able to create, edit, delete, publish, and unpublish articles
+- I should be able to create posts/short updates separate from full articles
+- I should be able to upload images using a drag-and-drop UI
+- Drag-and-drop should support cover images and gallery images
+- Uploaded images should preview before saving
+- I should be able to remove uploaded images before publishing
+- Images should save to the backend and display correctly on the public site
+- Do not require code edits to update stories, posts, scores, sections, or images
+
+Make the public site look more like ESPN:
+- Stronger sports-news layout
+- Bigger headlines
+- Tighter article cards
+- More professional spacing
+- Black, white, and gold color palette only
+- No blue accents anywhere
+- Add a top breaking-news style ticker
+- Add a main featured story area
+- Add a latest news column
+- Add section blocks for High School, College, Club, Events, and Athlete Spotlights
+- Make the homepage feel like a real sports media outlet, not a portfolio
+- Keep photography as the focus, but only use uploaded real images
+
+Make the site mobile-friendly and fully responsive. Test the login flow, staff dashboard, article creation, image upload, article publishing, and public homepage display. Fix all errors before finishing.

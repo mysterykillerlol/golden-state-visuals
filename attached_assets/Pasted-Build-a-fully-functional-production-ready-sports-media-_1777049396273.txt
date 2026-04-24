@@ -1,0 +1,247 @@
+Build a fully functional, production-ready sports media platform called Golden State Visuals (GSV) focused on Bay Area high school, college, and grassroots sports.
+
+This must be a real full-stack application with a working frontend, backend, database, and admin panel. This is not a mockup.
+
+This project must be structured and configured specifically to run correctly inside Replit.
+
+---
+
+REPLIT EXECUTION REQUIREMENTS
+
+* The project must run immediately with:
+  npm install
+  npm run dev
+
+* Do not use any broken or invalid start commands
+
+* Do not reference any incorrect paths such as "scripts/node_modules/tsx"
+
+* Ensure package.json scripts are valid and working:
+
+  * "dev": "vite"
+  * "build": "vite build"
+  * "preview": "vite preview"
+
+* Ensure the backend runs alongside the frontend using a single dev command (use concurrently or a similar method)
+
+---
+
+DESIGN SYSTEM
+
+* Style inspired by ESPN, with a cleaner and more modern execution
+
+* Do not use blue anywhere in the interface
+
+* Use only the following color palette:
+
+  * Black (#0a0a0a)
+  * White (#ffffff)
+  * Gold (#d4af37)
+
+* Gold must be used for interactive and highlight elements such as buttons, hover states, and active UI components
+
+* Use strong typography with bold headlines
+
+* Prioritize photography with large images and minimal clutter
+
+* Maintain clean spacing and a modern layout
+
+---
+
+SITE STRUCTURE
+
+* Home
+* High School
+* College
+* Club
+* Events
+* Athlete Spotlights
+* Galleries
+
+---
+
+HOMEPAGE
+
+* Large featured hero story
+* Game of the Week section
+* Latest articles grid
+* Featured galleries section
+* Clean layout similar to ESPN
+* Smooth hover interactions
+
+---
+
+ARTICLE SYSTEM
+
+Each article must include:
+
+* Title
+* Subtitle
+* Cover image (must be uploaded through admin panel)
+* Body content using a rich text editor
+* Category
+* Game metadata:
+
+  * Teams
+  * Date
+  * Location
+* createdAt timestamp
+* updatedAt timestamp
+
+Do not include seeded images or placeholder content. All images must be uploaded by the admin.
+
+---
+
+GAME-BASED CONTENT SYSTEM
+
+* Articles and galleries must be associated with a specific game
+
+* Each game contains:
+
+  * Teams
+  * Date
+  * Location
+
+* Display game information clearly on each article and gallery
+
+* Allow grouping of content by game
+
+* Provide the ability to view all content related to a specific game
+
+---
+
+ADMIN PANEL
+
+Authentication:
+
+* Email: [tylershawphoto@gmail.com](mailto:tylershawphoto@gmail.com)
+* Password: 4Lex!gsv
+
+---
+
+ADMIN FEATURES
+
+Articles:
+
+* Create, edit, and delete articles
+* Use a rich text editor
+* Upload cover images
+* Assign category
+* Assign game metadata
+* Automatically generate createdAt and updatedAt timestamps
+
+Galleries:
+
+* Create galleries
+* Assign galleries to a game
+* Upload multiple images
+* Store multiple images per gallery
+* Support lightbox viewing on frontend
+
+---
+
+IMAGE UPLOAD SYSTEM
+
+* Implement drag-and-drop upload interface
+* Include click-to-upload fallback
+* Show preview before saving
+* Store files in /server/uploads
+* Ensure uploads persist in Replit environment (use filesystem properly)
+* Store file paths in the database
+
+Supported uploads:
+
+* Article cover images
+* Gallery images
+
+Do not use external placeholder images. All images must be user-uploaded.
+
+---
+
+STAFF LOGIN
+
+* Do not place login in the navigation bar
+* Place a small “Staff Login” link in the footer only
+* Keep it visually minimal and unobtrusive
+
+---
+
+GALLERIES (FRONTEND)
+
+* Grid-based layout
+* Click to open full gallery
+* Lightbox viewer for images
+* Optimized image loading
+
+---
+
+TECH STACK
+
+Frontend:
+
+* React with Vite
+
+Backend:
+
+* Node.js with Express
+
+Database:
+
+* SQLite preferred (must persist locally in Replit)
+
+File uploads:
+
+* multer or equivalent
+
+---
+
+PROJECT STRUCTURE
+
+/client
+/server
+/server/uploads
+
+---
+
+API ROUTES
+
+* /api/articles
+* /api/galleries
+* /api/upload
+* /api/auth
+
+---
+
+FUNCTIONAL REQUIREMENTS
+
+* Data must persist between sessions
+* No runtime crashes
+* Safe handling of date values (avoid invalid Date errors)
+* Proper error handling across frontend and backend
+* Backend must serve uploaded images correctly
+
+---
+
+USER EXPERIENCE
+
+* Loading states
+* Empty states
+* Smooth transitions
+* Fully responsive layout
+* Clean and usable admin dashboard
+
+---
+
+OUTPUT REQUIREMENTS
+
+* Full working codebase
+* Functional frontend and backend
+* Connected database
+* Working admin panel
+* Functional drag-and-drop uploads
+* No placeholder data
+* No broken features
+
+---
+
+The final result must resemble a real sports media platform used for publishing coverage and obtaining press credentials.
