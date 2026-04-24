@@ -1,0 +1,970 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Golden State Visuals API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+  - name: auth
+  - name: articles
+  - name: games
+  - name: galleries
+  - name: upload
+  - name: home
+  - name: posts
+  - name: stats
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Admin logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ok"
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Current admin session
+      responses:
+        "200":
+          description: Session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MeResponse"
+
+  /articles:
+    get:
+      operationId: listArticles
+      tags: [articles]
+      summary: List articles
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Article"
+    post:
+      operationId: createArticle
+      tags: [articles]
+      summary: Create article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateArticleBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+  /articles/{id}:
+    get:
+      operationId: getArticle
+      tags: [articles]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateArticle
+      tags: [articles]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateArticleBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+    delete:
+      operationId: deleteArticle
+      tags: [articles]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ok"
+
+  /games:
+    get:
+      operationId: listGames
+      tags: [games]
+      responses:
+        "200":
+          description: Games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+    post:
+      operationId: createGame
+      tags: [games]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGameBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+  /games/{id}:
+    get:
+      operationId: getGame
+      tags: [games]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Game with related content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameDetail"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateGame
+      tags: [games]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGameBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+    delete:
+      operationId: deleteGame
+      tags: [games]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ok"
+
+  /galleries:
+    get:
+      operationId: listGalleries
+      tags: [galleries]
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Galleries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Gallery"
+    post:
+      operationId: createGallery
+      tags: [galleries]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGalleryBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gallery"
+  /galleries/{id}:
+    get:
+      operationId: getGallery
+      tags: [galleries]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Gallery
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gallery"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateGallery
+      tags: [galleries]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGalleryBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gallery"
+    delete:
+      operationId: deleteGallery
+      tags: [galleries]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ok"
+
+  /galleries/{id}/images:
+    post:
+      operationId: addGalleryImages
+      tags: [galleries]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddGalleryImagesBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gallery"
+
+  /galleries/{id}/images/{imageId}:
+    delete:
+      operationId: deleteGalleryImage
+      tags: [galleries]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: imageId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gallery"
+
+  /posts:
+    get:
+      operationId: listPosts
+      tags: [posts]
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: includeUnpublished
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+    post:
+      operationId: createPost
+      tags: [posts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePostBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+  /posts/{id}:
+    get:
+      operationId: getPost
+      tags: [posts]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updatePost
+      tags: [posts]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePostBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+    delete:
+      operationId: deletePost
+      tags: [posts]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ok"
+
+  /admin/stats:
+    get:
+      operationId: getAdminStats
+      tags: [stats]
+      summary: Aggregate counts and recent activity for the admin dashboard
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
+  /home/featured:
+    get:
+      operationId: getHomeFeatured
+      tags: [home]
+      summary: Homepage curated content
+      responses:
+        "200":
+          description: Curated content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HomeFeatured"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+    Ok:
+      type: object
+      properties:
+        ok:
+          type: boolean
+      required: [ok]
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required: [email, password]
+    AuthUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+      required: [id, email, name]
+    MeResponse:
+      type: object
+      properties:
+        user:
+          oneOf:
+            - $ref: "#/components/schemas/AuthUser"
+            - type: "null"
+
+    Game:
+      type: object
+      properties:
+        id:
+          type: integer
+        homeTeam:
+          type: string
+        awayTeam:
+          type: string
+        date:
+          type: string
+        location:
+          type: string
+        homeScore:
+          oneOf:
+            - type: integer
+            - type: "null"
+        awayScore:
+          oneOf:
+            - type: integer
+            - type: "null"
+        category:
+          type: string
+        sport:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, homeTeam, awayTeam, date, location, category, sport, createdAt, updatedAt]
+    CreateGameBody:
+      type: object
+      properties:
+        homeTeam:
+          type: string
+        awayTeam:
+          type: string
+        date:
+          type: string
+        location:
+          type: string
+        homeScore:
+          oneOf:
+            - type: integer
+            - type: "null"
+        awayScore:
+          oneOf:
+            - type: integer
+            - type: "null"
+        category:
+          type: string
+        sport:
+          type: string
+      required: [homeTeam, awayTeam, date, location, category, sport]
+    UpdateGameBody:
+      type: object
+      properties:
+        homeTeam:
+          type: string
+        awayTeam:
+          type: string
+        date:
+          type: string
+        location:
+          type: string
+        homeScore:
+          oneOf:
+            - type: integer
+            - type: "null"
+        awayScore:
+          oneOf:
+            - type: integer
+            - type: "null"
+        category:
+          type: string
+        sport:
+          type: string
+    GameDetail:
+      type: object
+      properties:
+        game:
+          $ref: "#/components/schemas/Game"
+        articles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Article"
+        galleries:
+          type: array
+          items:
+            $ref: "#/components/schemas/Gallery"
+      required: [game, articles, galleries]
+
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        subtitle:
+          type: string
+        body:
+          type: string
+        coverImage:
+          type: string
+        category:
+          type: string
+        gameId:
+          oneOf:
+            - type: integer
+            - type: "null"
+        game:
+          oneOf:
+            - $ref: "#/components/schemas/Game"
+            - type: "null"
+        author:
+          type: string
+        featured:
+          type: boolean
+        published:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, title, subtitle, body, coverImage, category, author, featured, published, createdAt, updatedAt]
+    CreateArticleBody:
+      type: object
+      properties:
+        title:
+          type: string
+        subtitle:
+          type: string
+        body:
+          type: string
+        coverImage:
+          type: string
+        category:
+          type: string
+        gameId:
+          oneOf:
+            - type: integer
+            - type: "null"
+        author:
+          type: string
+        featured:
+          type: boolean
+        published:
+          type: boolean
+      required: [title, category]
+    UpdateArticleBody:
+      type: object
+      properties:
+        title:
+          type: string
+        subtitle:
+          type: string
+        body:
+          type: string
+        coverImage:
+          type: string
+        category:
+          type: string
+        gameId:
+          oneOf:
+            - type: integer
+            - type: "null"
+        author:
+          type: string
+        featured:
+          type: boolean
+        published:
+          type: boolean
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+        author:
+          type: string
+        category:
+          oneOf:
+            - type: string
+            - type: "null"
+        published:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, body, author, published, createdAt, updatedAt]
+    CreatePostBody:
+      type: object
+      properties:
+        body:
+          type: string
+        author:
+          type: string
+        category:
+          oneOf:
+            - type: string
+            - type: "null"
+        published:
+          type: boolean
+      required: [body]
+    UpdatePostBody:
+      type: object
+      properties:
+        body:
+          type: string
+        author:
+          type: string
+        category:
+          oneOf:
+            - type: string
+            - type: "null"
+        published:
+          type: boolean
+
+    AdminStats:
+      type: object
+      properties:
+        totalArticles:
+          type: integer
+        publishedArticles:
+          type: integer
+        draftArticles:
+          type: integer
+        totalPosts:
+          type: integer
+        totalGalleries:
+          type: integer
+        totalGames:
+          type: integer
+        totalImages:
+          type: integer
+        recentUploads:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecentUpload"
+      required: [totalArticles, publishedArticles, draftArticles, totalPosts, totalGalleries, totalGames, totalImages, recentUploads]
+    RecentUpload:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+        galleryId:
+          type: integer
+        galleryTitle:
+          type: string
+        createdAt:
+          type: string
+      required: [id, url, galleryId, galleryTitle, createdAt]
+
+    GalleryImage:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+        caption:
+          type: string
+        position:
+          type: integer
+      required: [id, url, position]
+    Gallery:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        coverImage:
+          type: string
+        category:
+          type: string
+        gameId:
+          oneOf:
+            - type: integer
+            - type: "null"
+        game:
+          oneOf:
+            - $ref: "#/components/schemas/Game"
+            - type: "null"
+        published:
+          type: boolean
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/GalleryImage"
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, title, description, coverImage, category, published, images, createdAt, updatedAt]
+    CreateGalleryBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        coverImage:
+          type: string
+        category:
+          type: string
+        gameId:
+          oneOf:
+            - type: integer
+            - type: "null"
+        images:
+          type: array
+          items:
+            type: string
+        published:
+          type: boolean
+      required: [title, category]
+    UpdateGalleryBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        coverImage:
+          type: string
+        category:
+          type: string
+        gameId:
+          oneOf:
+            - type: integer
+            - type: "null"
+        published:
+          type: boolean
+    AddGalleryImagesBody:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+      required: [urls]
+
+    HomeFeatured:
+      type: object
+      properties:
+        hero:
+          oneOf:
+            - $ref: "#/components/schemas/Article"
+            - type: "null"
+        gameOfTheWeek:
+          oneOf:
+            - $ref: "#/components/schemas/Game"
+            - type: "null"
+        latest:
+          type: array
+          items:
+            $ref: "#/components/schemas/Article"
+        featuredGalleries:
+          type: array
+          items:
+            $ref: "#/components/schemas/Gallery"
+      required: [latest, featuredGalleries]
