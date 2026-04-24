@@ -1,9 +1,11 @@
-import { useListPosts, useListArticles, useGetHomeFeatured } from "@workspace/api-client-react";
 import { Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fmtDate } from "@/lib/utils";
-import type { Article, Post } from "@workspace/api-client-react";
 import { Empty } from "@/components/ui/empty";
+// TEMP DATA (replace backend later)
+const useListPosts = () => ({ data: [], isLoading: false });
+const useListArticles = () => ({ data: [], isLoading: false });
+const useGetHomeFeatured = () => ({ data: null, isLoading: false });
 
 function TextOnlyCard({ category, title, author, date }: { category: string, title: string, author?: string, date?: string }) {
   return (
